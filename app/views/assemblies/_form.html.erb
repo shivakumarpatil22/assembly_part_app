@@ -1,0 +1,28 @@
+<%= form_with(model: assembly, local: true) do |form| %>
+  <% if assembly.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(assembly.errors.count, "error") %> prohibited this assembly from being saved:</h2>
+
+      <ul>
+        <% assembly.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.select :parts[], options_from_collection_for_select(Part.all, "id", "part_number"), :multiple => true %>
+  </div>
+
+  <%#= form.select 'parts[]', options_for_select(@parts.map { |s| [s.part_number, s.id] }), multiple: true, size: 10 %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
