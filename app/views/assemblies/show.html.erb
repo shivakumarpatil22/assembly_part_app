@@ -5,5 +5,10 @@
   <%= @assembly.name %>
 </p>
 
+<h1>Part number</h1>
+<% @assembly.parts.each do |part| %>
+<p><%= part.part_number %></p>
+<% end %>
+
 <%= link_to 'Edit', edit_assembly_path(@assembly) %> |
 <%= link_to 'Back', assemblies_path %>

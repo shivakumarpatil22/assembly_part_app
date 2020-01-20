@@ -29,6 +29,7 @@ class AssembliesController < ApplicationController
 
     respond_to do |format|
       if @assembly.save
+        @assembly.parts << Part.where(id: params[:parts])
         format.html { redirect_to @assembly, notice: 'Assembly was successfully created.' }
         format.json { render :show, status: :created, location: @assembly }
       else
@@ -43,6 +44,9 @@ class AssembliesController < ApplicationController
   def update
     respond_to do |format|
       if @assembly.update(assembly_params)
+        existing_ids = @assembly.parts.where(id: params[:parts]).pluck(:id).uniq
+        new_id = params[:parts].map(&:to_i) - existing_ids
+        @assembly.parts << Part.where(id: new_id) if new_id.present?
         format.html { redirect_to @assembly, notice: 'Assembly was successfully updated.' }
         format.json { render :show, status: :ok, location: @assembly }
       else
@@ -69,7 +73,7 @@ class AssembliesController < ApplicationController
     end
 
     def set_parts
-      @parts = Part.all
+      @parts = Part.pluck(:part_number,:id)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
